@@ -1,0 +1,25 @@
+name: Run Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**' # using branches instead of all ignores tags
+      
+jobs:
+  versioner:
+    runs-on: ubuntu-latest
+    name: Generate Version
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3.5.2
+        with:
+          fetch-depth: 0
+          
+      - name: Semantic Version
+        id: version
+        uses: paulhatch/semantic-version@v5.1.0
+        with:
+          version_format: "${major}.${minor}.${patch}.${increment}"
